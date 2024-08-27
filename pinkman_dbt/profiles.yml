@@ -1,0 +1,43 @@
+---
+pinkman:
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+  outputs:
+    prod:
+      type: duckdb
+      schema: prod
+      path:  "md:{{env_var('MOTHERDUCK_DATABASE')}}?motherduck_token={{env_var('MOTHERDUCK_TOKEN')}}"
+      threads: 1
+      extensions:
+        - httpfs
+        - parquet
+      settings:
+        s3_region: us-east-1
+        s3_access_key_id: "{{ env_var('S3_ACCESS_KEY_ID') }}"
+        s3_secret_access_key: "{{ env_var('S3_SECRET_ACCESS_KEY') }}"
+
+    dev:
+      type: duckdb
+      schema: dev
+      path:  "md:{{env_var('MOTHERDUCK_DATABASE')}}?motherduck_token={{env_var('MOTHERDUCK_TOKEN')}}"
+      threads: 1
+      extensions:
+        - httpfs
+        - parquet
+      settings:
+        s3_region: us-east-1
+        s3_access_key_id: "{{ env_var('S3_ACCESS_KEY_ID') }}"
+        s3_secret_access_key: "{{ env_var('S3_SECRET_ACCESS_KEY') }}"
+
+
+    ci:
+      type: duckdb
+      schema: staging
+      path:  "md:{{env_var('MOTHERDUCK_DATABASE')}}?motherduck_token={{env_var('MOTHERDUCK_TOKEN')}}"
+      threads: 1
+      extensions:
+        - httpfs
+        - parquet
+      settings:
+        s3_region: us-east-1
+        s3_access_key_id: "{{ env_var('S3_ACCESS_KEY_ID') }}"
+        s3_secret_access_key: "{{ env_var('S3_SECRET_ACCESS_KEY') }}"

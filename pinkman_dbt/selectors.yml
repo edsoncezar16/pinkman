@@ -1,0 +1,17 @@
+selectors:
+  - name: incremental 
+    description: "Select all models that are incrementally materialized, excluding snapshots"
+    definition:
+        method: config.materialized
+        value: incremental
+        exclude:
+          - method: resource_type
+            value: snapshot
+  - name: non_incremental
+    description: "Select all models that are not incrementally materialized"
+    definition:
+      method: fqn
+      value: '*'
+      exclude:
+        - method: config.materialized
+          value: incremental

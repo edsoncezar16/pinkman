@@ -1,0 +1,36 @@
+name: "pinkman"
+version: "1.0.0"
+config-version: 2
+
+profile: "pinkman"
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  +tags: ["model"]
+  +meta:
+    dagster:
+      owners: ["edsoncezar16@gmail.com"]
+
+  pinkman:
+    staging:
+      +materialized: view
+    model:
+      +materialized: table
+    metrics:
+      +materialized: table
+    intermediate:
+      +materialized: view
+
+seeds:
+  +tags: seed
+
+vars:
+  dev_num_days_to_include: 90
+  # These variables are used for incremental models
+  min_date: "2000-01-01"
+  max_date: "9999-12-31"

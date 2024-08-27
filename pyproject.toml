@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pinkman"
+version = "0.0.1"
+dependencies = [
+    "dbt-core",
+    "dbt-duckdb",
+    "dagster",
+    "dagster-dbt",
+    "dagster-embedded-elt",
+    "dlt[duckdb]",
+    "feedparser"
+]
+
+[project.optional-dependencies]
+dev = [
+    "dagster-webserver",
+    "pytest",
+    "sqlfluff>=3",
+    "sqlfluff-templater-dbt",
+]
+
+tests = [
+    "pytest",
+    "responses"
+]
+
+[tool.setuptools.packages.find]
+exclude = ["pinkman_tests"]
+
+# ########################
+# ##### DAGSTER
+# ########################
+
+[tool.dagster]
+module_name = "pinkman.definitions"
+code_location_name = "pinkman"
+
+
+# ########################
+# ##### SQLFLUFF
+# ########################
+
+[tool.sqlfluff.core]
+templater = "dbt"
+dialect = "duckdb"
+exclude_rules = [
+    "aliasing.unique.column",
+    "ambiguous.column_count",
+    "structure.column_order",
+    "structure.using",
+    "references.consistent",
+    "references.qualification",
+]
+max_line_length = 100
+nocolor = true
+# Warn on the use of keywords as identifiers
+warnings = "RF04"
+
+[tool.sqlfluff.templater.dbt]
+project_dir = "./pinkman_dbt"
+profiles_dir = "./pinkman_dbt"
+
+[tool.sqlfluff.templater.jinja]
+apply_dbt_builtins = true
+load_macros_from_path = "./pinkman_dbt/macros"
+
+[tool.sqlfluff.indentation]
+tab_space_size = 4
+
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.identifiers]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.functions]
+extended_capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.literals]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.types]
+extended_capitalisation_policy = "lower"
